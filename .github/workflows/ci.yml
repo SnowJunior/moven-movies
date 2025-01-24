@@ -21,10 +21,13 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
+
+      - name: Run Linter
+        run: npm run lint
 
       - name: Run tests
-        run: yarn test
+        run: npm run test
 
   build_and_deploy:
     name: Build and Deploy

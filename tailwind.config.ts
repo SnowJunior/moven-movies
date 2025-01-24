@@ -8,9 +8,13 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'custom_gradient': 'radial-gradient(at top right, #7e22ce, #ffffff)',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'primary': '#7e22ce',
       },
     },
   },
