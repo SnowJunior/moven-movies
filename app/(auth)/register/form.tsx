@@ -1,37 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import CustomButton from "@/components/button";
-import { loginUser } from "@/providers/auth/auth.provider";
-import { redirect } from "next/navigation";
+import { useState } from "react";
+import Link from "next/link";
+import { registerUser } from "@/providers/auth/auth.provider";
 import { useToast } from "@/hooks/use-toast";
+import { redirect } from "next/navigation";
 
-export default function SignInForm() {
+export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleRegister = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    setIsLoading(true);
     const formData = new FormData(e.currentTarget);
 
-    try {
-      const response = await loginUser(
-        formData.get("email") as string,
-        formData.get("password") as string
-      );
+    const payload = {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      username: formData.get('username') as string
+    };
 
-      if (response.success !== true) {
+    try {
+      const response = await registerUser(payload.email, payload.password, payload.username);
+
+      if (response !== null) {
         toast({
-          title: "Login Failed",
-          description: response.message,
-          variant: "destructive",
+          title: "Registration Successful",
+          variant: "default",
         });
+        setIsLoading(false);
       }
-      toast({
-        title: "Login Successful",
-        description: response.message,
-        variant: "default",
-      });
+      setIsLoading(false);
     } catch (e: any) {
       const errorMessage = e.message;
       toast({
@@ -42,12 +44,13 @@ export default function SignInForm() {
 
       console.error("This is a login failure", e);
     } finally {
-      redirect("/dashboard");
+      setIsLoading(false);
+      redirect("/login");
     }
   };
   return (
     <form
-      onSubmit={handleLogin}
+      onSubmit={handleRegister}
       action="javascript:void(0);"
       className="xsm:w-full p-12 w-full md:p-14 lg:p-16 text-center z-10 bg-white-opacity rounded-lg 2xl:p-20 text-black"
     >
@@ -58,6 +61,14 @@ export default function SignInForm() {
           id="username"
           placeholder="Username"
           name="username"
+        />
+
+        <input
+          className="rounded-md border border-primary bg-inputColor h-14 px-4 text-start"
+          type="email"
+          id="email"
+          placeholder="Email"
+          name="email"
         />
         <div className="relative w-full border-none rounded-md">
           <input
@@ -81,30 +92,22 @@ export default function SignInForm() {
           </button>
         </div>
       </div>
+
+      <CustomButton title={"Login"} type={"submit"} isLoading={isLoading} />
       <div className="flex justify-between md:text-base xsm:text-sm items-center gap-2 xsm:gap-6 mt-6">
-        <div className="">
-          {""}
-          <a
-            href="/register"
-            data-link="signup_redirect"
-            className="text-newColor"
-          >
-            Create Account
-          </a>
-        </div>
-        <div className="">
+        <div className="text-lg">
           {" "}
-          <a
-            href="/forgot-password"
-            data-link="forgot_redirect"
-            className="text-newColor"
-          >
-            Forgot Password?
-          </a>
+          <p data-link="forgot_redirect" className="text-newColor">
+            Already have an account?{" "}
+            <Link
+              href={"/login"}
+              className={"text-blue-600 text-lg font-semibold"}
+            >
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
-
-      <CustomButton title={"Login"} type={"submit"} />
     </form>
   );
 }
