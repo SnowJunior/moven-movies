@@ -8,14 +8,16 @@ import {
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { firebaseApp } from "../firebase/firebase.provider";
 
+// Initialize cloud firestore for user storage
 const firestore = getFirestore(firebaseApp);
 
+// Regsiter a new user to application
 export async function registerUser(
   email: string,
   password: string,
-  username: string,
   additionalData?: Record<string, any>
-) {
+): Promise<{ success: boolean; user?: User; message: string }> {
+  // Initialize auth for registration
   const auth = getAuth(firebaseApp);
 
   try {
@@ -32,23 +34,26 @@ export async function registerUser(
       uid: user.uid,
       email: user.email,
       createdAt: new Date().toISOString(),
-      username: username,
       ...additionalData,
     });
 
     console.log("User registered and saved to Firestore:", user);
-    return user;
+    // Return the new created user
+    return { success: true, user, message: "Registration successful" };
   } catch (error: any) {
+    // Pass an error message to the components
     return {
+      success: false,
       message: error.message,
     };
   }
 }
 
+// Login with an exsisting user account
 export async function loginUser(
   email: string,
   password: string
-): Promise<{ user?: User; message: string, success: boolean }> {
+): Promise<{ user?: User; message: string; success: boolean }> {
   const auth = getAuth(firebaseApp);
 
   try {
@@ -58,15 +63,18 @@ export async function loginUser(
       email,
       password
     );
+    // Return user credentials from login
     const user = userCredential.user;
 
     console.log("User logged in:", user);
+    // Return user to components with request status
     return {
       success: true,
       user,
       message: "Successful login",
     };
   } catch (error: any) {
+    // Return and error and pass to component level
     return {
       success: false,
       message: error.message,

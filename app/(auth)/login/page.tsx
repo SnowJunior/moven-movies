@@ -1,4 +1,4 @@
-import logo from "@/public/images/darkLogo.png"
+import logo from "../../../public/images/darkLogo.png"
 import React from "react";
 import Image from "next/image"
 import SignInForm from "./form";
