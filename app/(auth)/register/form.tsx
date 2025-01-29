@@ -72,7 +72,6 @@ export default function SignUpForm() {
         "error",
         `${e.message || "An unexpected error occurred. Please try again."}`
       );
-      console.error("Registration error:", e);
     } finally {
       setIsLoading(false);
       redirect("/dashboard");

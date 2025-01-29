@@ -72,14 +72,14 @@ const DashboardScreen = () => {
   const isError = debouncedSearchValue ? isSearchError : isPopularError;
 
   return (
-    <div className="container mx-auto">
+    <div className="mx-auto w-[95%]">
       <div className="flex flex-col mt-4">
         <div className="flex justify-end items-center w-full">
           <Input
             label="Search"
             labelPlacement="outside"
             placeholder="Search movies..."
-            className="w-1/5"
+            className="lg:w-1/5 mb-3 md:w-2/5"
             value={searchValue}
             startContent={
               <IoMdSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
@@ -93,7 +93,7 @@ const DashboardScreen = () => {
         {isError ? (
           <p>Error loading movies.</p>
         ) : (
-          <div className="grid lg:grid-cols-3 gap-6 mt-4 md:grid-cols-2">
+          <div className="grid xl:grid-cols-3 gap-6 mt-4 md:grid-cols-2">
             {movies?.map((movie: CardProps) => (
               <CardComponent
                 key={movie.id}
@@ -114,7 +114,7 @@ const DashboardScreen = () => {
                 onNext: () => handlePageChange("next"),
                 onPrevious: () => handlePageChange("prev"),
                 onPage: currentPage,
-                pages: popular?.data.total_pages,
+                pages: Math.min(popular?.data.total_pages || 1, 10),
                 goToPage: (page) => handlePageChange("goTo", page),
               }}
             />

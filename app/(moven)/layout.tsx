@@ -6,7 +6,7 @@ import React from "react";
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const query = new QueryClient();
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mx-auto w-full">
       <QueryClientProvider client={query}>
         <TopNavbar />
         {children}

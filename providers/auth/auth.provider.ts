@@ -37,11 +37,11 @@ export async function registerUser(
       ...additionalData,
     });
 
-    console.log("User registered and saved to Firestore:", user);
     // Return the new created user
     return { success: true, user, message: "Registration successful" };
   } catch (error: any) {
     // Pass an error message to the components
+    console.log('registratio failure details:', error)
     return {
       success: false,
       message: error.message,
@@ -66,7 +66,6 @@ export async function loginUser(
     // Return user credentials from login
     const user = userCredential.user;
 
-    console.log("User logged in:", user);
     // Return user to components with request status
     return {
       success: true,

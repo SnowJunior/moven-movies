@@ -9,7 +9,7 @@ export default function CardComponent({
   props,
   isLoading: globalLoading,
   onClick,
-}: Readonly<{ props: CardProps; isLoading: boolean; onClick: () => void }>) {
+}: Readonly<{ props: CardProps; isLoading: boolean; onClick?: () => void }>) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const handleImageLoad = () => {
@@ -19,7 +19,7 @@ export default function CardComponent({
   const isLoading = globalLoading || !isImageLoaded;
 
   return (
-    <div onClick={onClick}>
+    <div id="cardItem" onClick={onClick}>
       <Card className="py-4">
         <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
           <Skeleton className="rounded-lg w-full" isLoaded={!isLoading}>
@@ -35,11 +35,11 @@ export default function CardComponent({
               </p>
             </Skeleton>
           </div>
-          <div className="flex flex-row gap-3">
-            <Skeleton className="rounded-lg w-1/5" isLoaded={!isLoading}>
+          <div className="flex flex-row gap-1">
+            <Skeleton className="rounded-lg" isLoaded={!isLoading}>
               <p className="text-lg font-bold">Overview:</p>
             </Skeleton>
-            <Skeleton className="rounded-lg w-4/5" isLoaded={!isLoading}>
+            <Skeleton className="rounded-lg" isLoaded={!isLoading}>
               <p className="text-base font-medium mt-1">
                 {props.overview.length > 40
                   ? `${props.overview.slice(0, 40)}...`

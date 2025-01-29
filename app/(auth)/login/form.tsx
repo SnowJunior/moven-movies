@@ -72,7 +72,7 @@ export default function SignInForm() {
   return (
     <form
       onSubmit={handleLogin}
-      className="xsm:w-full p-12 w-full md:p-14 lg:p-16 text-center z-10 bg-white-opacity rounded-lg 2xl:p-20 text-black"
+      className="p-8 w-full md:p-14 lg:p-16 text-center z-10 bg-white rounded-lg xl:p-20 text-black"
     >
       <div className="flex flex-col w-full gap-4">
         <div className="flex flex-col">

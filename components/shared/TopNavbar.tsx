@@ -3,23 +3,9 @@ import Image from "next/image";
 import React from "react";
 import logo from "@/public/images/lightLogo.png";
 import { Avatar } from "@heroui/avatar";
-import { usePathname } from "next/navigation";
 
 const TopNavbar = () => {
-  const pathName = usePathname();
-
-  const getDetailText = (path: string) => {
-    switch (path) {
-      case "/dashboard":
-        return "Dashboard";
-      case "/profile":
-        return "User Profile";
-      default:
-        return "";
-    }
-  };
   return (
-    <div className="flex flex-col border border-b-black">
       <div className="h-24 bg-black text-white">
         <div className="flex flex-row w-[90%] mx-auto items-center justify-between mt-4">
           <div className="flex flex-row gap-4 items-center">
@@ -30,7 +16,7 @@ const TopNavbar = () => {
               width={70}
               height={70}
             />
-            <div className="text-xl font-bold">{getDetailText(pathName)}</div>
+            <h2 className="text-xl font-bold hidden sm:block">Dashboard</h2>
           </div>
           <div className="flex gap-4 items-center">
             <Avatar
@@ -44,7 +30,6 @@ const TopNavbar = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

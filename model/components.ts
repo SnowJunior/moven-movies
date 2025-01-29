@@ -17,8 +17,8 @@ export interface CardProps {
   overview: string
   vote_average: number
   adult: boolean
-  poster_path: string
-  backdrop_path: string
+  poster_path: string | null
+  backdrop_path: string | null
   popularity: number
 }
 
