@@ -1,0 +1,115 @@
+import {
+  getAuth,
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { registerUser, loginUser } from "./auth.provider"; // Adjust path
+
+jest.mock("firebase/auth");
+jest.mock("firebase/firestore");
+jest.mock("../firebase/firebase.provider", () => ({
+  firebaseApp: {}, // Mock firebase app
+}));
+
+const mockAuth = {
+  createUserWithEmailAndPassword: jest.fn(),
+  signInWithEmailAndPassword: jest.fn(),
+};
+
+const mockFirestore = {
+  doc: jest.fn(),
+  setDoc: jest.fn(),
+};
+
+describe("Auth Provider", () => {
+  beforeEach(() => {
+    (getAuth as jest.Mock).mockReturnValue(mockAuth);
+    (getFirestore as jest.Mock).mockReturnValue(mockFirestore);
+
+    mockAuth.createUserWithEmailAndPassword.mockClear();
+    mockAuth.signInWithEmailAndPassword.mockClear();
+    mockFirestore.doc.mockClear();
+    mockFirestore.setDoc.mockClear();
+  });
+
+  describe("registerUser", () => {
+    it("successfully registers a user", async () => {
+      const mockUserCredential = {
+        user: {
+          uid: "mockUid",
+          email: "test@example.com",
+        },
+      };
+      mockAuth.createUserWithEmailAndPassword.mockResolvedValue(mockUserCredential);
+
+      const result = await registerUser("test@example.com", "password123", {
+        username: "Test User",
+      });
+
+      expect(mockAuth.createUserWithEmailAndPassword).toHaveBeenCalledWith(
+        {}, // firebaseApp (mocked)
+        "test@example.com",
+        "password123"
+      );
+      expect(mockFirestore.doc).toHaveBeenCalledWith(
+        {}, // firestore instance (mocked)
+        "users",
+        "mockUid"
+      );
+      expect(mockFirestore.setDoc).toHaveBeenCalled();
+      expect(result).toEqual({
+        success: true,
+        user: mockUserCredential.user,
+        message: "Registration successful",
+      });
+    });
+
+    it("handles registration errors", async () => {
+      const mockError = new Error("Registration failed");
+      mockAuth.createUserWithEmailAndPassword.mockRejectedValue(mockError);
+
+      const result = await registerUser("test@example.com", "password123");
+
+      expect(result).toEqual({
+        success: false,
+        message: mockError.message,
+      });
+    });
+  });
+
+  describe("loginUser", () => {
+    it("successfully logs in a user", async () => {
+      const mockUserCredential = {
+        user: {
+          uid: "mockUid",
+          email: "test@example.com",
+        },
+      };
+      mockAuth.signInWithEmailAndPassword.mockResolvedValue(mockUserCredential);
+
+      const result = await loginUser("juju@gmail.com", "12345678");
+
+      expect(mockAuth.signInWithEmailAndPassword).toHaveBeenCalledWith(
+        {}, // firebaseApp (mocked)
+        "juju@gmail.com",
+        "12345678"
+      );
+      expect(result).toEqual({
+        // user: mockUserCredential.user,
+        message: "Successful login",
+        success: true,
+      });
+    });
+
+    it("handles login errors", async () => {
+      const mockError = new Error("Login failed");
+      mockAuth.signInWithEmailAndPassword.mockRejectedValue(mockError);
+
+      const result = await loginUser("test@example.com", "password123");
+
+      expect(result).toEqual({
+        success: false,
+        message: mockError.message,
+      });
+    });
+  });
+});

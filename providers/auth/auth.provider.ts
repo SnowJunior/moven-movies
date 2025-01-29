@@ -4,12 +4,14 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   User,
+  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { firebaseApp } from "../firebase/firebase.provider";
 
-// Initialize cloud firestore for user storage
+// Initialize cloud firestore & auth for user storage
 const firestore = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp)
 
 // Regsiter a new user to application
 export async function registerUser(
@@ -17,16 +19,15 @@ export async function registerUser(
   password: string,
   additionalData?: Record<string, any>
 ): Promise<{ success: boolean; user?: User; message: string }> {
-  // Initialize auth for registration
-  const auth = getAuth(firebaseApp);
-
   try {
+    // Check if the email is already registered
+    const existingMethods = await fetchSignInMethodsForEmail(auth, email);
+    if (existingMethods.length > 0) {
+      throw new Error("This email is already in use. Please log in instead.");
+    }
+
     // Create the user in Firebase Authentication
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
     // Save the user to Firestore
@@ -37,15 +38,11 @@ export async function registerUser(
       ...additionalData,
     });
 
-    // Return the new created user
     return { success: true, user, message: "Registration successful" };
   } catch (error: any) {
-    // Pass an error message to the components
-    console.log('registratio failure details:', error)
-    return {
-      success: false,
-      message: error.message,
-    };
+    // Handle Firebase Auth errors
+    const errorMessage = getAuthErrorMessage(error);
+    return { success: false, message: errorMessage };
   }
 }
 
@@ -73,10 +70,20 @@ export async function loginUser(
       message: "Successful login",
     };
   } catch (error: any) {
-    // Return and error and pass to component level
-    return {
-      success: false,
-      message: error.message,
-    };
+    // Handle Firebase Auth errors
+    const errorMessage = getAuthErrorMessage(error);
+    return { success: false, message: errorMessage };
   }
+}
+
+// Helper function to map Firebase errors to user-friendly messages
+function getAuthErrorMessage(error: any): string {
+  const errorMap: Record<string, string> = {
+    "auth/email-already-in-use": "This email is already in use. Please log in instead.",
+    "auth/invalid-email": "The email address is not valid.",
+    "auth/weak-password": "The password is too weak. Use at least 6 characters.",
+    "auth/network-request-failed": "Network error. Please check your connection and try again.",
+  };
+
+  return errorMap[error.code] || "An unexpected error occurred. Please try again.";
 }
