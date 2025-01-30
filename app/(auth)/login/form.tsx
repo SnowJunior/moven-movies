@@ -57,7 +57,7 @@ export default function SignInForm() {
       if (!response.success) {
         showToast(
           "error",
-          `${"Invalid email or password."}`
+          "Invalid email or password."
         );
       }
       setIsLoading(false);
