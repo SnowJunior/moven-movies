@@ -50,7 +50,7 @@ jobs:
         run: npm run build
 
       - name: Deploy to Vercel
-        uses: vercel/actions@v1
+        uses: vercel/vercel-action@v1
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
