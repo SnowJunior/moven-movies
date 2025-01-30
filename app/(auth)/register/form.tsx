@@ -7,7 +7,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { registerUser } from "@/providers/auth/auth.provider";
 import { showToast } from "@/hooks/useToast";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
