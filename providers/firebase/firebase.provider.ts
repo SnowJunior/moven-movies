@@ -1,23 +1,48 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-// https://firebase.google.com/docs/web/setup#available-libraries
+// firebaseClient.ts
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: "moven-movies.firebaseapp.com",
-  projectId: "moven-movies",
-  storageBucket: "moven-movies.firebasestorage.app",
-  messagingSenderId: process.env.FIREBASE_MESSENGER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-};
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
+import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
+import { Auth, getAuth } from "firebase/auth";
+import { Firestore, getFirestore } from "firebase/firestore";
 
-// Initialize firebase products
-const auth = getAuth(firebaseApp);
-const firestore = getFirestore(firebaseApp);
+class FirebaseService {
+  private static instance: FirebaseService;
+  private readonly app: FirebaseApp;
+  private readonly auth: Auth;
+  private readonly firestore: Firestore;
 
-export { auth, firestore };
+  private constructor() {
+    if (typeof window === "undefined") {
+      throw new Error("FirebaseService should only be initialized in the browser.");
+    }
+
+    this.app = getApps().length ? getApp() : initializeApp({
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: "moven-movies.firebaseapp.com",
+      projectId: "moven-movies",
+      storageBucket: "moven-movies.firebasestorage.app",
+      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    });
+
+    this.auth = getAuth(this.app);
+    this.firestore = getFirestore(this.app);
+  }
+
+  static getInstance(): FirebaseService {
+    if (!FirebaseService.instance) {
+      FirebaseService.instance = new FirebaseService();
+    }
+    return FirebaseService.instance;
+  }
+
+  getAuth(): Auth {
+    return this.auth;
+  }
+
+  getFirestore(): Firestore {
+    return this.firestore;
+  }
+}
+
+// Export a singleton instance
+export const firebaseService = FirebaseService.getInstance();
