@@ -7,6 +7,7 @@ export interface Button {
   disabled?: boolean
   isLoading?: boolean
   type: "submit" | "reset" | "button"
+  image: string
 }
 
 // Define a card component elements

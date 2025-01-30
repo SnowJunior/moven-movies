@@ -13,16 +13,20 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "i.pravatar.cc"
+        hostname: "i.pravatar.cc",
       },
       {
-        protocol: 'https',
-        hostname: 'heroui.com',
+        protocol: "https",
+        hostname: "heroui.com",
       },
       {
-        protocol: 'https',
-        hostname: 'image.tmdb.org'
-      }
+        protocol: "https",
+        hostname: "image.tmdb.org",
+      },
+      {
+        protocol: "https",
+        hostname: "authjs.dev",
+      },
     ],
   },
 };
