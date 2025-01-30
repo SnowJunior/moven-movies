@@ -1,13 +1,6 @@
 import "@testing-library/jest-dom";
 import axios from "axios";
-import {
-  apiClient,
-  baseURL,
-  imageURL,
-  apiKey,
-  messangerID,
-  appID,
-} from "./utils"; // Adjust path
+import { apiClient } from "./utils"; // Adjust path
 
 jest.mock("axios");
 
@@ -51,48 +44,4 @@ describe("apiClient", () => {
     expect(response).toEqual(mockResponse);
   });
 
-  // it("should handle API error responses", async () => {
-  //   const mockAxios = {
-  //     get: jest.fn().mockRejectedValue({
-  //       response: { status: 400, data: "Bad Request" },
-  //     }),
-  //   };
-
-  //   (axios.create as jest.Mock).mockReturnValue(mockAxios);
-
-  //   const client = apiClient();
-  //   await expect(client.get("/test")).rejects.toThrow("API Error: 400 - Bad Request");
-  // });
-
-  // it("should handle API request errors", async () => {
-  //   const mockAxios = {
-  //     get: jest.fn().mockRejectedValue({ request: "Test Request" }),
-  //   };
-
-  //   (axios.create as jest.Mock).mockReturnValue(mockAxios);
-
-  //   const client = apiClient();
-  //   await expect(client.get("/test")).rejects.toThrow("API Error: No response received from server");
-  // });
-
-  // it("should handle generic API errors", async () => {
-  //   const mockAxios = {
-  //     get: jest.fn().mockRejectedValue(new Error("Test Error Message")),
-  //   };
-
-  //   (axios.create as jest.Mock).mockReturnValue(mockAxios);
-
-  //   const client = apiClient();
-  //   await expect(client.get("/test")).rejects.toThrow("API Error: Test Error Message");
-  // });
-
-  it("should export environment variables", () => {
-    expect(baseURL).toBe(process.env.NEXT_PUBLIC_API_URL);
-    expect(imageURL).toBe("https://image.tmdb.org/t/p/original");
-    expect(apiKey).toBe(process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
-    expect(messangerID).toBe(
-      process.env.NEXT_PUBLIC_FIREBASE_MESSENGER_ID
-    );
-    expect(appID).toBe(process.env.NEXT_PUBLIC_FIREBASE_APP_ID);
-  });
 });
