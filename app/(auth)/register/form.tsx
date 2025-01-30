@@ -6,8 +6,8 @@ import CustomButton from "@/components/button";
 import { useState } from "react";
 import Link from "next/link";
 import { registerUser } from "@/providers/auth/auth.provider";
-import { redirect } from "next/navigation";
 import { showToast } from "@/hooks/useToast";
+import { useRouter } from "next/router";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +17,7 @@ export default function SignUpForm() {
     email: "",
     password: "",
   });
+  const router = useRouter();
 
   const validateForm = (payload: {
     email: string;
@@ -67,14 +68,16 @@ export default function SignUpForm() {
         );
         return;
       }
+      setIsLoading(false)
+      router.push("/dashboard");
     } catch (e: any) {
+      setIsLoading(false)
       showToast(
         "error",
         `${e.message || "An unexpected error occurred. Please try again."}`
       );
     } finally {
       setIsLoading(false);
-      redirect("/dashboard");
     }
   };
 

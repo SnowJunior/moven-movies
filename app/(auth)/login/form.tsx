@@ -6,6 +6,7 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import CustomButton from "@/components/button";
 import { loginUser } from "@/providers/auth/auth.provider";
 import { showToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
   // Set various component states
@@ -15,6 +16,7 @@ export default function SignInForm() {
     email: "",
     password: "",
   });
+  const router = useRouter();
 
   // Validation function
   const validateForm = (payload: { email: string; password: string }) => {
@@ -52,16 +54,19 @@ export default function SignInForm() {
 
     try {
       // Send data to login logic
-      const response = await loginUser(payload.email, payload.password);
+      const { success } = await loginUser(
+        payload.email,
+        payload.password
+      );
 
-      if (!response.success) {
-        showToast(
-          "error",
-          "Invalid email or password."
-        );
+      if (!success) {
+        showToast("error", "Invalid email or password.");
+        setIsLoading(false)
+        return;
+      } else {
+        setIsLoading(false);
+        router.push('/dashboard')
       }
-      setIsLoading(false);
-      return;
     } catch (error: any) {
       setIsLoading(false);
       showToast("error", error.message);

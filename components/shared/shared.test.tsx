@@ -45,13 +45,6 @@ describe("MovieModal", () => {
       <MovieModal movie={mockMovie} onClose={mockOnClose} isLoading={false} />
     );
 
-    // Check if the image is rendered with correct src
-    // const image = screen.getByAltText(mockMovie.title);
-    // expect(image).toHaveAttribute(
-    //   "src",
-    //   expect.stringContaining(mockMovie.poster_path)
-    // );
-
     // Check if movie details are displayed
     expect(
       screen.getByRole("heading", { name: mockMovie.title })
@@ -66,26 +59,7 @@ describe("MovieModal", () => {
     expect(screen.getByText(`Popularity:`)).toBeInTheDocument();
     expect(screen.getByText(`${mockMovie.popularity}`)).toBeInTheDocument();
 
-    // fireEvent.load(image);
-    // await waitFor(() => expect(screen.getAllByRole("img").length).toBe(1));
   });
-
-  // it("handles missing poster path and displays placeholder", () => {
-  //   const movieWithoutPoster = { ...mockMovie, poster_path: null };
-  //   render(
-  //     <MovieModal
-  //       movie={movieWithoutPoster}
-  //       onClose={mockOnClose}
-  //       isLoading={false}
-  //     />
-  //   );
-
-  //   const imageElement = screen.getByAltText(movieWithoutPoster.title);
-  //   expect(imageElement).toHaveAttribute(
-  //     "src",
-  //     expect.stringContaining("hero-card-complete.jpeg")
-  //   );
-  // });
 
   it("calls onClose when close button is clicked", () => {
     render(
