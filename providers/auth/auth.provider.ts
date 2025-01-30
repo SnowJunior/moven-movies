@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   User,
   fetchSignInMethodsForEmail,
 } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-import { firebaseApp } from "../firebase/firebase.provider";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, firestore } from "@/providers/firebase/firebase.provider";
 
-// Initialize cloud firestore & auth for user storage
-const firestore = getFirestore(firebaseApp);
-const auth = getAuth(firebaseApp)
 
 // Regsiter a new user to application
 export async function registerUser(
@@ -51,7 +47,6 @@ export async function loginUser(
   email: string,
   password: string
 ): Promise<{ user?: User; message: string; success: boolean }> {
-  const auth = getAuth(firebaseApp);
 
   try {
     // Log in the user
