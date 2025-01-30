@@ -20,7 +20,7 @@ export const apiClient = (): AxiosInstance => {
 // ENV variables to store project secrets
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 export const imageURL = "https://image.tmdb.org/t/p/original";
-export const apiKey = process.env.FIREBASE_API_KEY;
+export const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 export const messangerID =
-  process.env.FIREBASE_MESSENGER_ID;
-export const appID = process.env.FIREBASE_APP_ID;
+  process.env.NEXT_PUBLIC_FIREBASE_MESSENGER_ID;
+export const appID = process.env.NEXT_PUBLIC_FIREBASE_APP_ID;

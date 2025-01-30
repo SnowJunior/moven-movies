@@ -89,10 +89,10 @@ describe("apiClient", () => {
   it("should export environment variables", () => {
     expect(baseURL).toBe(process.env.NEXT_PUBLIC_API_URL);
     expect(imageURL).toBe("https://image.tmdb.org/t/p/original");
-    expect(apiKey).toBe(process.env.FIREBASE_API_KEY);
+    expect(apiKey).toBe(process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
     expect(messangerID).toBe(
-      process.env.FIREBASE_MESSENGER_ID
+      process.env.NEXT_PUBLIC_FIREBASE_MESSENGER_ID
     );
-    expect(appID).toBe(process.env.FIREBASE_APP_ID);
+    expect(appID).toBe(process.env.NEXT_PUBLIC_FIREBASE_APP_ID);
   });
 });
