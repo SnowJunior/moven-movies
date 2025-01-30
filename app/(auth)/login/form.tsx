@@ -54,13 +54,13 @@ export default function SignInForm() {
 
     try {
       // Send data to login logic
-      const { success } = await loginUser(
+      const { success, message } = await loginUser(
         payload.email,
         payload.password
       );
 
       if (!success) {
-        showToast("error", "Invalid email or password.");
+        showToast("error", `Invalid email or password. Error: ${message}`);
         setIsLoading(false)
         return;
       } else {
