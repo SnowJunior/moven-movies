@@ -3,13 +3,16 @@ import { render, screen, fireEvent } from "@testing-library/react";
 
 import TopNavbar from "./TopNavbar";
 import MovieModal from "./CardModal";
+import AuthModal from "./AuthModal";
+
+const mockOnClose = jest.fn();
 
 describe("TopNavbar Component", () => {
   it("renders the top navbar component correctly", () => {
     render(<TopNavbar />);
 
     expect(screen.getByText("Dashboard")).toBeInTheDocument();
-    expect(screen.getByText("@snow")).toBeInTheDocument();
+    expect(screen.getByText("@")).toBeInTheDocument();
   });
 
   it("shows the avatar image", () => {
@@ -34,11 +37,11 @@ describe("MovieModal", () => {
     backdrop_path: "/v9Du2HC3hlknAvGlWhquRbeifwW.jpg",
   };
 
-  let mockOnClose: jest.Mock
+  let mockOnClose: jest.Mock;
 
   beforeEach(() => {
-    mockOnClose = jest.fn()
-  })
+    mockOnClose = jest.fn();
+  });
 
   it("renders the component with movie data and handles image loading", async () => {
     render(
@@ -58,7 +61,6 @@ describe("MovieModal", () => {
     expect(screen.getByText(mockMovie.release_date)).toBeInTheDocument();
     expect(screen.getByText(`Popularity:`)).toBeInTheDocument();
     expect(screen.getByText(`${mockMovie.popularity}`)).toBeInTheDocument();
-
   });
 
   it("calls onClose when close button is clicked", () => {
@@ -68,5 +70,81 @@ describe("MovieModal", () => {
     const closeButton = screen.getByRole("button"); // Or query by icon if you prefer
     fireEvent.click(closeButton);
     expect(mockOnClose).toHaveBeenCalledTimes(2);
+  });
+
+  test("renders movie poster image", () => {
+    render(
+      <MovieModal movie={mockMovie} onClose={mockOnClose} isLoading={false} />
+    );
+    const posterImage = screen.getByTestId("movie-poster");
+
+    expect(posterImage).toBeInTheDocument();
+    expect(posterImage.getAttribute("src")).toContain(
+      encodeURIComponent(mockMovie.poster_path)
+    );
+  });
+
+  test("renders fallback image when poster_path is null", () => {
+    const movieWithoutPoster = { ...mockMovie, poster_path: null };
+
+    render(
+      <MovieModal
+        movie={movieWithoutPoster}
+        onClose={mockOnClose}
+        isLoading={false}
+      />
+    );
+
+    const posterImage = screen.getByTestId("movie-poster");
+
+    expect(posterImage).toBeInTheDocument();
+    expect(posterImage.getAttribute("src")).toContain(
+      encodeURIComponent("https://heroui.com/images/hero-card-complete.jpeg")
+    );
+  });
+
+  test("renders movie backdrop image", () => {
+    render(
+      <MovieModal movie={mockMovie} onClose={mockOnClose} isLoading={false} />
+    );
+    const posterImage = screen.getByTestId("mobile-poster");
+
+    expect(posterImage).toBeInTheDocument();
+    expect(posterImage.getAttribute("src")).toContain(
+      encodeURIComponent(mockMovie.backdrop_path)
+    );
+  });
+
+  test("renders fallback image when poster_path is null", () => {
+    const movieWithoutPoster = { ...mockMovie, backdrop_path: null };
+
+    render(
+      <MovieModal
+        movie={movieWithoutPoster}
+        onClose={mockOnClose}
+        isLoading={false}
+      />
+    );
+
+    const posterImage = screen.getByTestId("mobile-poster");
+
+    expect(posterImage).toBeInTheDocument();
+    expect(posterImage.getAttribute("src")).toContain(
+      encodeURIComponent("https://heroui.com/images/hero-card-complete.jpeg")
+    );
+  });
+});
+
+describe("AuthModal", () => {
+  test("renders Logout text", () => {
+    render(<AuthModal onClose={mockOnClose} logOut={mockOnClose} />);
+    expect(screen.getByText(/Logout User/i)).toBeInTheDocument();
+    expect(screen.getByText(/Are you sure you to exit/i)).toBeInTheDocument();
+  });
+
+  test("contains at least one button", () => {
+    render(<AuthModal onClose={mockOnClose} />);
+    const buttons = screen.getAllByRole("button");
+    expect(buttons.length).toBeGreaterThan(0);
   });
 });

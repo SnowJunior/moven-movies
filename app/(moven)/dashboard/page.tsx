@@ -17,6 +17,7 @@ const DashboardScreen = () => {
 
   const debouncedSearchValue = useDebounce(searchValue, 500);
 
+
   // Handle fetch of movie list
   const {
     data: popular,

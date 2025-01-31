@@ -7,6 +7,7 @@ export interface Button {
   disabled?: boolean
   isLoading?: boolean
   type: "submit" | "reset" | "button"
+  image: string
 }
 
 // Define a card component elements
@@ -41,6 +42,6 @@ export interface MovieModalProps {
 }
 
 export interface AuthModalProps {
-  onClose: () => void
-  logOut: () => void
+  onClose?: () => void
+  logOut?: () => void
 }
