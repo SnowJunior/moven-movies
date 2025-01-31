@@ -37,6 +37,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
               isLoaded={!isLoading}
             >
               <Image
+              data-testid="mobile-poster"
                 src={`${
                   movie.backdrop_path
                     ? `${imageURL}${movie.backdrop_path}`
@@ -53,9 +54,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
               <h2 className="text-2xl font-bold mb-4">{movie.title}</h2>
               <div className="flex gap-1">
                 <p className="text-lg mb-4 font-semibold">Rated:</p>
-                <p className="text-lg mb-4">
-                  {movie.adult ? "18+" : "PG"}
-                </p>
+                <p className="text-lg mb-4">{movie.adult ? "18+" : "PG"}</p>
               </div>
             </Skeleton>
             <Skeleton className="mt-2 rounded-lg" isLoaded={!isLoading}>
@@ -94,6 +93,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
             isLoaded={!isLoading}
           >
             <Image
+              data-testid="movie-poster"
               src={`${
                 movie.poster_path
                   ? `${imageURL}${movie.poster_path}`

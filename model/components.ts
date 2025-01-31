@@ -42,6 +42,6 @@ export interface MovieModalProps {
 }
 
 export interface AuthModalProps {
-  onClose: () => void
-  logOut: () => void
+  onClose?: () => void
+  logOut?: () => void
 }
