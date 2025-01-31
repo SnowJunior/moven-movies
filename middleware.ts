@@ -1,24 +1,19 @@
-'use server'
-import { cookies } from 'next/headers'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from "next/server";
+import { withAuth } from "next-auth/middleware";
 
-export default async function middleware(req: NextRequest) {
-  const protectedRoutes = ['/dashboard'];
-
-  const currentPath = req.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes(currentPath);
-
-  if (isProtectedRoute) {
-    const token = (await cookies()).get('x-AB');
-
-    if (!token) {
-      return NextResponse.redirect(new URL('/login', req.nextUrl));
-    }
+// Apply middleware only to protected routes
+export default withAuth(
+  function middleware() {
+    return NextResponse.next();
+  },
+  {
+    pages: {
+      signIn: "/login", // Redirect to login if not authenticated
+    },
   }
+);
 
-  return NextResponse.next();
-}
-
+// Configure middleware to run on specific routes
 export const config = {
-  matcher: ['/dashboard'], // Match only the dashboard route
+  matcher: ["/dashboard/:path*"],
 };
