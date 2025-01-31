@@ -45,3 +45,5 @@ Ensure you have an API key from TMDB and set it up in your environment variables
 NEXT_PUBLIC_API_URL=your_api_key_here
 ```
 
+## Project Planning & Wireframe
+Plan board [Miro board] (https://miro.com/app/board/uXjVLq0vQ1I=/?share_link_id=659068962126)
